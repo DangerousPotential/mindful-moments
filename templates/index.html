@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <title>Mindful Moments</title>
+    <link href="{{url_for('static', filename= 'style.css')}}" rel="stylesheet" type="text/css"/>
+  </head>
+  <body>
+    <a href="login"><button>Login</button></a>
+    <a href="signup"><button>Signup</button></a>
+    <p></p>
+    <img src="static/logo.png" alt="logo">
+    <h1 class="centered-heading">Welcome to Mindful Moments</h1>
+    
+    <p></p>
+    
+    <h1>Daily Quote:</h1>
+      {% if daily_quote %}
+        <p>{{ daily_quote }}</p>
+      {% endif %}
+    <h1>Collections of Quotes:</h1>
+    <ul>
+        <li>
+            <h3>Inspiration</h3>
+            <ul>
+                <li>{{ outputi }}</li>
+            </ul>
+        </li>
+        <li>
+            <h3>Motivation</h3>
+            <ul>
+                <li>{{ outputm }}</li>
+            </ul>
+        </li>
+        <li>
+            <h3>Wisdom</h3>
+            <ul>
+                <li>{{ outputw }}</li>
+            </ul>
+        </li>
+    </ul>
+    {{ temperature }}
+  </body>
+</html>

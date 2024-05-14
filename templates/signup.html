@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Sign Up</title>
+    <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <h2 class="centered-heading">Sign Up</h2>
+    <form id="signupForm" method="POST" action="/signup">
+        <div>
+            <label for="username">Username:</label>
+            <input type="text" name="username" id="nusername" placeholder="username" required>
+        </div>
+        <div>
+            <label for="password">Password:</label>
+            <input type="password" name="password" id="npassword" placeholder="password" required>
+        </div>
+        <div>
+            <label for="repassword">Confirm Password:</label>
+            <input type="password" name="repassword" id="repassword" placeholder="repassword" required>
+        </div>
+        <div>
+            <button type="button" onclick="signUp()">Sign Up</button>
+        </div>
+    </form>
+    <input type="button" class="nav-button" value="Back" onclick="goBack()">
+    <script>
+        // JavaScript code for sign-up functionality
+        function signUp() {
+            var form = document.getElementById('signupForm');
+            var formData = new FormData(form);
+
+            fetch('/signup', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message) {
+                    alert(data.message);
+                    form.reset();
+                } else if (data.error) {
+                    alert(data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Error during sign-up:', error);
+                alert('An error occurred: ' + error.message);
+            });
+        }
+
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+</body>
+</html>

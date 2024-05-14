@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <title>Mindful Moments</title>
+    <link href="{{url_for('static', filename= 'style.css')}}" rel="stylesheet" type="text/css"/>
+  </head>
+  <body>
+    <!-- <h3 class="centered-heading">Hi {{ username }}</h3> -->
+    <h1 class="centered-heading">Journal Entry</h1>
+    <form method="post" action="/journal">
+      <label for="journalEntry">Write your journal entry:</label><br>
+      <textarea name="journalEntry" rows="5" cols="50"></textarea><br>
+      <button type="submit">Enter entry</button>
+    </form>
+    
+    <!-- Emoji faces -->
+    <!-- <img src="static/emojiface.jpg" alt="emojiface.jpg"> -->
+
+    <h3 class="centered-heading">{{ response }}</h3>
+    
+    {% if mood %}
+      <p>Your mood: <span>{{ mood }}</span></p>
+    {% endif %}
+
+    <h1>Daily Quote:</h1>
+    <li>
+      {{ daily_quote }}
+      <button type="button" class="save-button">Save</button>
+      <p class="save-message"></p>
+      <div class="saved-quote"></div>
+    </li>
+    
+    <h1>Collections of Quotes:</h1>
+    <ul>
+      <li>
+        <h3>Inspiration</h3>
+        <ul>
+          <li>
+            {{ outputi }}
+            <button type="button" class="save-button">Save</button>
+            <p class="save-message"></p>
+            <div class="saved-quote"></div>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <h3>Motivation</h3>
+        <ul>
+          <li>
+            {{ outputm }}
+            <button type="button" class="save-button">Save</button>
+            <p class="save-message"></p>
+            <div class="saved-quote"></div>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <h3>Wisdom</h3>
+        <ul>
+          <li>
+            {{ outputw }}
+            <button type="button" class="save-button">Save</button>
+            <p class="save-message"></p>
+            <div class="saved-quote"></div>
+          </li>
+        </ul>
+      </li>
+    </ul>
+    
+    <h1>Saved Quotes:</h1>
+    <ul class="saved-quotes"></ul>
+    
+    <script>
+      window.onload = function() {
+        // var urlParams = new URLSearchParams(window.location.search);
+        // var username = urlParams.get('username');
+        // document.querySelector('.centered-heading').textContent = 'Hi ' + username;
+      }
+      
+      document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.save-button').forEach(function(button) {
+          button.addEventListener('click', function() {
+            var quote = this.parentElement.firstChild.nodeValue.trim();
+            var savedQuote = this.nextElementSibling.nextElementSibling;
+            var savedQuotesList = document.querySelector('.saved-quotes');
+    
+            // Make an AJAX request to save the quote
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/save_quote', true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+            xhr.onload = function() {
+              if (xhr.status === 200) {
+                var savedQuoteItem = document.createElement('li');
+                savedQuoteItem.textContent = 'Saved: ' + quote;
+                savedQuotesList.appendChild(savedQuoteItem);
+              } else {
+                savedQuote.textContent = 'Error saving quote.';
+              }
+            };
+            xhr.send('quote=' + encodeURIComponent(quote));
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
